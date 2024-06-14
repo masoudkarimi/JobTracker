@@ -35,6 +35,7 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
+            implementation(libs.kotlinx.coroutines.core)
             implementation(libs.sqldelight.coroutines)
             implementation(libs.sqldelight.runtime)
         }
@@ -62,8 +63,8 @@ android {
 
 sqldelight {
     databases {
-        create("job_tracker") {
-            packageName = "sqldelight.database"
+        create("JobTracker") {
+            packageName.set("ir.masoudkarimi.data.db")
         }
     }
 }

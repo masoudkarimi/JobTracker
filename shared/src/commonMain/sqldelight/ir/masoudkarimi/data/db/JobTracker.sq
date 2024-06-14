@@ -1,0 +1,22 @@
+
+--- Application Status Table
+CREATE TABLE application_status (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    position INTEGER NOT NULL
+);
+
+insert:
+INSERT INTO application_status (name, position) VALUES (:name, IFNULL((SELECT MAX(position) FROM application_status) + 1, 1));
+
+findById:
+SELECT * FROM application_status WHERE id = :id LIMIT 1;
+
+selectAll:
+SELECT * FROM application_status;
+
+update:
+UPDATE application_status SET name = :name, position = :position WHERE id = :id;
+
+delete:
+DELETE FROM application_status WHERE id = :id;
