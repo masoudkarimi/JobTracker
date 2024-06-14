@@ -1,0 +1,27 @@
+
+--- Application Status Table
+CREATE TABLE application_status (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    position INTEGER NOT NULL
+);
+
+insertApplicationStatus:
+INSERT INTO application_status (name, position)
+VALUES (?, ?);
+
+findApplicationStatusById:
+SELECT * FROM application_status
+WHERE id = ? LIMIT 1;
+
+selectAllApplicationStatuses:
+SELECT * FROM application_status;
+
+updateApplicationStatus:
+UPDATE application_status
+SET name = ?, position = ?
+WHERE id = ?;
+
+deleteApplicationStatusById:
+DELETE FROM application_status
+WHERE id = ?;

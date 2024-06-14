@@ -9,6 +9,11 @@ plugins {
 }
 
 kotlin {
+    compilerOptions {
+        // Expect classes are in beta as for writing this article, you can enable them by:
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
+
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
@@ -24,11 +29,13 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "Shared"
             isStatic = true
+            linkerOpts.add("-lsqlite3")
         }
     }
     
     sourceSets {
         commonMain.dependencies {
+            implementation(libs.sqldelight.coroutines)
             implementation(libs.sqldelight.runtime)
         }
         androidMain.dependencies {
@@ -49,5 +56,13 @@ android {
     }
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
+    }
+}
+
+sqldelight {
+    databases {
+        create("job_tracker") {
+            packageName = "sqldelight.database"
+        }
     }
 }
