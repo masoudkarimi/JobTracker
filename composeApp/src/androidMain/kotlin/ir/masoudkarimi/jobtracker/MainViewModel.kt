@@ -2,42 +2,38 @@ package ir.masoudkarimi.jobtracker
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import data.db.Database
-import data.db.provideDatabase
+import data.ApplicationStatusRepository
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val database: Database
+    private val applicationStatusRepository: ApplicationStatusRepository
 ) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            database.getAllApplicationStatusesList().ifEmpty {
-                Log.d("MainViewModel", "Application Statuses are empty. Add some")
-                database.insertNewApplicationStatus("Wishlist")
-                database.insertNewApplicationStatus("Applied")
-                database.insertNewApplicationStatus("Interview")
-                database.insertNewApplicationStatus("Offer")
-                database.insertNewApplicationStatus("Rejected")
+            applicationStatusRepository.flow.collect {
+                it.ifEmpty {
+                    Log.d("MainViewModel", "Application Statuses are empty. Add some")
+                    addSomeApplicationStatus()
+                }
             }
         }
 
         viewModelScope.launch {
-            database.getAllApplicationStatuses().collect {
+            applicationStatusRepository.flow.collect {
                 Log.d("MainViewModel", "Application Statuses: $it")
             }
         }
     }
 
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                MainViewModel(provideDatabase())
-            }
+    private fun addSomeApplicationStatus() {
+        viewModelScope.launch {
+            applicationStatusRepository.insert("Wishlist")
+            applicationStatusRepository.insert("Applied")
+            applicationStatusRepository.insert("Interview")
+            applicationStatusRepository.insert("Offer")
+            applicationStatusRepository.insert("Rejected")
         }
     }
 }

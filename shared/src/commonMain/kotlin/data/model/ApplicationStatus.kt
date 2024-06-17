@@ -1,6 +1,6 @@
-package data.db.model
+package data.model
 
-data class ApplicationStatusEntity(
+data class ApplicationStatus(
     val id: Long,
     val name: String,
     val position: Long

@@ -39,10 +39,13 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.sqldelight.coroutines)
             implementation(libs.sqldelight.runtime)
+            api(libs.koin.core)
+            api(libs.koin.test)
         }
         androidMain.dependencies {
             implementation(libs.sqldelight.android.driver)
             api(libs.androidx.startup)
+            api(libs.koin.android)
         }
         iosMain.dependencies {
             implementation(libs.sqldelight.native.driver)

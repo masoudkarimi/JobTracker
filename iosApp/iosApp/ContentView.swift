@@ -21,31 +21,25 @@ extension ContentView {
     class ViewModel: ObservableObject {
         @Published var values: [String] = []
         
+        private let repository = KoinHelper().applicationStatusRepository
+        
         init() {
-            Task {
-                do {
-                    let db = Database(databaseDriver: DatabaseDriver())
-                    let emittedValues = try await db.getAllApplicationStatusesList()
-                    
-                    if emittedValues.isEmpty {
-                        try await db.insertNewApplicationStatus(name: "Wishlist")
-                        try await db.insertNewApplicationStatus(name: "Applied")
-                        try await db.insertNewApplicationStatus(name: "Interview")
-                    }
-                    
-                    NSLog("Adding items done!")
-                } catch {
-                    NSLog(error.localizedDescription)
-                }
-                
-            
-            }
+//            Task {
+//                do {
+//                    try await repository.insert(name: "Wishlist")
+//                    try await repository.insert(name: "Applied")
+//                    try await repository.insert(name: "Interview")
+//                    
+//                    
+//                    NSLog("Adding items done!")
+//                } catch {
+//                    NSLog(error.localizedDescription)
+//                }
+//            }
         }
         
         func startObserving() async {
-            let db = Database(databaseDriver: DatabaseDriver())
-            let emittedValues = await db.getAllApplicationStatuses()
-            for await item in emittedValues {
+            for await item in repository.flow {
                 NSLog("Item received \(item)")
             }
         }
