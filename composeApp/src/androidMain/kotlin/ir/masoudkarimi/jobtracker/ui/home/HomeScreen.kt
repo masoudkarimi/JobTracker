@@ -1,4 +1,4 @@
-package ir.masoudkarimi.jobtracker
+package ir.masoudkarimi.jobtracker.ui.home
 
 import Greeting
 import androidx.compose.animation.AnimatedVisibility
@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import ir.masoudkarimi.jobtracker.MainViewModel
 import jobtracker.composeapp.generated.resources.Res
 import jobtracker.composeapp.generated.resources.compose_multiplatform
 import org.jetbrains.compose.resources.painterResource
@@ -23,7 +24,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 @Preview
-fun Home(
+fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = koinViewModel()
 ) {
