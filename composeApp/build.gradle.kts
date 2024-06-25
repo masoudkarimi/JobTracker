@@ -24,6 +24,7 @@ kotlin {
             implementation(libs.lifecycle.viewmodel.compose)
             implementation(libs.lifecycle.runtime.compose)
             implementation(libs.koin.android.compose)
+            implementation(libs.google.fonts)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
