@@ -1,6 +1,7 @@
 package ir.masoudkarimi.jobtracker.di
 
 import ir.masoudkarimi.jobtracker.MainViewModel
+import ir.masoudkarimi.jobtracker.ui.home.HomeViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -13,4 +14,5 @@ val androidModule = module {
     }
 
     viewModel { MainViewModel(get()) }
+    viewModel { HomeViewModel(get()) }
 }

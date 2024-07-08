@@ -1,22 +1,84 @@
-
---- Application Status Table
-CREATE TABLE application_status (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE ApplicationStatus(
+    id INTEGER NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
-    position INTEGER NOT NULL
+    position INTEGER NOT NULL,
+    jobCount INTEGER NOT NULL DEFAULT 0
 );
 
-insert:
-INSERT INTO application_status (name, position) VALUES (:name, IFNULL((SELECT MAX(position) FROM application_status) + 1, 1));
+CREATE TABLE Job(
+    id INTEGER PRIMARY KEY,
+    companyName TEXT NOT NULL,
+    jobTitle TEXT NOT NULL,
+    salary TEXT NOT NULL,
+    location TEXT NOT NULL,
+    link TEXT NOT NULL,
+    applicationStatusId INTEGER NOT NULL,
+    createdAt TEXT NOT NULL ,
+    FOREIGN KEY(applicationStatusId) REFERENCES ApplicationStatus(id)
+);
 
-findById:
-SELECT * FROM application_status WHERE id = :id LIMIT 1;
+-- Trigger to update job_count when a job is added
+CREATE TRIGGER update_job_count_insert
+AFTER INSERT ON Job
+BEGIN
+    UPDATE ApplicationStatus
+    SET jobCount = jobCount + 1
+    WHERE id = new.applicationStatusId;
+END;
 
-selectAll:
-SELECT * FROM application_status;
+-- Trigger to update job_count when a job is added
+CREATE TRIGGER update_job_count_delete
+AFTER DELETE ON Job
+BEGIN
+    UPDATE ApplicationStatus
+    SET jobCount = jobCount - 1
+    WHERE id = old.applicationStatusId;
+END;
 
-update:
-UPDATE application_status SET name = :name, position = :position WHERE id = :id;
+selectAllApplicationStatusesWithJobs:
+SELECT
+    ApplicationStatus.id AS statusId,
+    ApplicationStatus.name AS statusName,
+    ApplicationStatus.position AS statusPosition,
+    ApplicationStatus.jobCount AS statusJobCount,
+    Job.id AS jobId,
+    Job.companyName,
+    Job.jobTitle,
+    Job.salary,
+    Job.location,
+    Job.link,
+    Job.applicationStatusId,
+    Job.createdAt
+FROM ApplicationStatus
+LEFT JOIN Job ON ApplicationStatus.id = Job.applicationStatusId
+ORDER BY ApplicationStatus.position;
 
-delete:
-DELETE FROM application_status WHERE id = :id;
+insertApplicationStatus:
+INSERT INTO ApplicationStatus (name, position) VALUES (:name, IFNULL((SELECT MAX(position) FROM ApplicationStatus) + 1, 1));
+
+updateApplicationStatus:
+UPDATE ApplicationStatus SET name = :name, position = :position WHERE id = :id;
+
+deleteApplicationStatus:
+DELETE FROM ApplicationStatus WHERE id = :id;
+
+insertJob:
+INSERT INTO Job (
+    companyName, jobTitle, salary, location, link, applicationStatusId, createdAt
+) VALUES (
+    ?, ?, ?, ?, ?, ?, ?
+);
+
+deleteJob:
+DELETE FROM Job WHERE id = :id;
+
+updateJob:
+UPDATE Job
+SET companyName = :companyName,
+    jobTitle = :jobTitle,
+    salary = :salary,
+    location = :location,
+    link = :link,
+    applicationStatusId = :applicationStatusId,
+    createdAt = :createdAt
+WHERE id = :id;

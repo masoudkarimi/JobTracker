@@ -10,6 +10,8 @@ plugins {
 }
 
 kotlin {
+    task("testClasses")
+
     compilerOptions {
         // Expect classes are in beta as for writing this article, you can enable them by:
         freeCompilerArgs.add("-Xexpect-actual-classes")
@@ -39,6 +41,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.sqldelight.coroutines)
             implementation(libs.sqldelight.runtime)
+            api(libs.kotlinx.datetime)
             api(libs.koin.core)
             api(libs.koin.test)
         }
