@@ -1,5 +1,7 @@
 package data.model
 
+import kotlinx.datetime.LocalDateTime
+
 data class Job(
     val id: Long,
     val companyName: String,
@@ -8,5 +10,5 @@ data class Job(
     val location: String,
     val link: String,
     val statusId: Long,
-    val createdAt: String
+    val createdAt: LocalDateTime
 )

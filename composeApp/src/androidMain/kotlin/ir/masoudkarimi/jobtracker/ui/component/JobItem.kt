@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.model.Job
+import util.toHumanReadableTime
 
 @Composable
 fun JobItem(job: Job) {
@@ -66,7 +67,9 @@ fun JobItem(job: Job) {
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = job.createdAt,
+                        text = job.createdAt.toHumanReadableTime().let {
+                            "added $it"
+                        },
                         textAlign = TextAlign.Left,
                         fontWeight = FontWeight.Light,
                         fontSize = 12.sp

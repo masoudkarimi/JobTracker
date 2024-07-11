@@ -49,7 +49,7 @@ internal class ApplicationStatusRepositoryImpl(
                                 location = job.location.orEmpty(),
                                 link = job.link.orEmpty(),
                                 statusId = job.applicationStatusId!!,
-                                createdAt = job.createdAt.orEmpty()
+                                createdAt = LocalDateTime.parse(job.createdAt!!)
                             )
                         }
 
@@ -80,7 +80,7 @@ internal class ApplicationStatusRepositoryImpl(
                 location = job.location,
                 link = job.link,
                 applicationStatusId = job.statusId,
-                createdAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).toString(),
+                createdAt = job.createdAt.toString(),
             )
         }
     }

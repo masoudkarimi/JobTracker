@@ -45,6 +45,9 @@ kotlin {
             api(libs.koin.core)
             api(libs.koin.test)
         }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+        }
         androidMain.dependencies {
             implementation(libs.sqldelight.android.driver)
             api(libs.androidx.startup)
