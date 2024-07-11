@@ -60,7 +60,7 @@ class DateUtilTest {
         val nowHour = now.toLocalDateTime(timeZone).hour
         val pastDateTime = beforeNow(nowHour + 1L, DateTimeUnit.HOUR)
         val result = pastDateTime.toHumanReadableTime()
-        assertEquals("Yesterday at ${pastDateTime.time.shortTime()}", result)
+        assertEquals("Yesterday at ${pastDateTime.time.toShortTimeString()}", result)
     }
 
     @Test
@@ -69,7 +69,7 @@ class DateUtilTest {
             .toLocalDateTime(timeZone)
         val result = pastDateTime.toHumanReadableTime()
 
-        assertEquals("${pastDateTime.date.dayOfWeek()} at ${pastDateTime.time.shortTime()}", result)
+        assertEquals("${pastDateTime.date.dayOfWeek()} at ${pastDateTime.time.toShortTimeString()}", result)
     }
 
     @Test

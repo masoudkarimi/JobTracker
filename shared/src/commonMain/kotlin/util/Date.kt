@@ -18,35 +18,30 @@ import kotlin.time.Duration
 fun LocalDateTime.toHumanReadableTime(timeZone: TimeZone = TimeZone.currentSystemDefault()): String {
     val now = Clock.System.now()
     val duration: Duration = now - this.toInstant(timeZone)
-    val seconds = duration.inWholeSeconds
-    val minutes = duration.inWholeMinutes
-    val hours = duration.inWholeHours
     val days = duration.inWholeDays
 
     return when {
-        seconds < 60 -> "few secs ago"
-        minutes == 1L -> "a minute ago"
-        minutes < 10 -> "a few minutes ago"
-        minutes < 60 -> "$minutes minutes ago"
-        hours == 1L -> "an hour ago"
-        isYesterday() -> "Yesterday at ${this.time.shortTime()}"
-        hours < 24 -> "$hours hrs ago"
-        this.isSameWeekAs(now.toLocalDateTime(timeZone)) -> "${
-            this.date.dayOfWeek()
-        } at ${this.time.shortTime()}"
-
-        days < 30 -> "${days / 7} weeks ago"
-        days < 365 -> "${days / 30} months ago"
-        else -> "${days / 365} years ago"
+        duration.inWholeSeconds < SECONDS_IN_MINUTE -> "few secs ago"
+        duration.inWholeMinutes == 1L -> "a minute ago"
+        duration.inWholeMinutes < 10 -> "a few minutes ago"
+        duration.inWholeMinutes < MINUTES_IN_HOUR -> "${duration.inWholeMinutes} minutes ago"
+        duration.inWholeHours == 1L -> "an hour ago"
+        isYesterday() -> "Yesterday at ${this.time.toShortTimeString()}"
+        duration.inWholeHours < HOURS_IN_DAY -> "${duration.inWholeHours} hrs ago"
+        this.isSameWeekAs(now.toLocalDateTime(timeZone)) ->
+            "${this.date.dayOfWeek()} at ${this.time.toShortTimeString()}"
+        days < DAYS_IN_MONTH -> "${days / DAYS_IN_WEEK} weeks ago"
+        days < DAYS_IN_YEAR -> "${days / DAYS_IN_MONTH} months ago"
+        else -> "${days / DAYS_IN_YEAR} years ago"
     }
 }
 
-fun LocalDate.dayOfWeek() : String {
+fun LocalDate.dayOfWeek(): String {
     return this.dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() }
 }
 
 @OptIn(FormatStringsInDatetimeFormats::class)
-fun LocalTime.shortTime(): String {
+fun LocalTime.toShortTimeString(): String {
     return this.format(LocalTime.Format {
         byUnicodePattern("HH:mm")
     })
@@ -65,3 +60,10 @@ fun LocalDateTime.isSameWeekAs(other: LocalDateTime): Boolean {
 fun LocalDate.atStartOfWeek(): LocalDate {
     return this.minus(this.dayOfWeek.ordinal, DateTimeUnit.DAY)
 }
+
+private const val SECONDS_IN_MINUTE = 60
+private const val MINUTES_IN_HOUR = 60
+private const val HOURS_IN_DAY = 24
+private const val DAYS_IN_WEEK = 7
+private const val DAYS_IN_MONTH = 30
+private const val DAYS_IN_YEAR = 365
