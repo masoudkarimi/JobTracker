@@ -27,6 +27,7 @@ kotlin {
             implementation(libs.koin.android.compose)
             implementation(libs.google.fonts)
             implementation(libs.navigation.compose)
+            implementation(libs.androidx.compose.icons)
             implementation(libs.kotlinx.serialization.json)
         }
         commonMain.dependencies {
@@ -63,7 +64,8 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {

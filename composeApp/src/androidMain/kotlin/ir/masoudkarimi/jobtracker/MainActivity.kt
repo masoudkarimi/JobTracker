@@ -24,7 +24,6 @@ class MainActivity : ComponentActivity() {
                     navController = rememberNavController(),
                     modifier = Modifier
                         .fillMaxSize()
-                        .safeDrawingPadding()
                 )
             }
         }

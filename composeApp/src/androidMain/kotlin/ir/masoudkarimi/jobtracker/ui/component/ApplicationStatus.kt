@@ -1,10 +1,11 @@
 package ir.masoudkarimi.jobtracker.ui.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -30,21 +31,28 @@ fun ApplicationStatus(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        Text(
-            text = "${applicationStatus.jobCount}",
+        Box(
             modifier = Modifier
                 .background(
                     color = MaterialTheme.colorScheme.primaryContainer,
                     shape = MaterialTheme.shapes.medium
                 )
                 .padding(8.dp)
-                .defaultMinSize(28.dp, 28.dp),
-            fontSize = 13.sp,
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onPrimaryContainer
-        )
+                .size(24.dp),
+            contentAlignment = Alignment.Center
+        ) {
+
+            Text(
+                text = "${applicationStatus.jobCount}",
+                fontSize = 13.sp,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+        }
 
         Spacer(modifier = Modifier.width(8.dp))
         Text(
@@ -55,7 +63,11 @@ fun ApplicationStatus(
             fontSize = 20.sp
         )
         IconButton(onClick = { /*TODO*/ }) {
-            Icon(Icons.Filled.MoreVert, contentDescription = "Menu", modifier = Modifier.rotate(90f))
+            Icon(
+                Icons.Filled.MoreVert,
+                contentDescription = "Menu",
+                modifier = Modifier.rotate(90f)
+            )
         }
     }
 }
