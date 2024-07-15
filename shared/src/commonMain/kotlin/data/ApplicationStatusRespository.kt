@@ -31,7 +31,7 @@ internal class ApplicationStatusRepositoryImpl(
     private val db: JobTracker
 ) : ApplicationStatusRepository {
     override val flow: Flow<List<ApplicationStatus>>
-        get() = db.jobTrackerQueries.selectAllApplicationStatusesWithJobs()
+        get() = db.applicationStatusQueries.selectAllApplicationStatusesWithJobs()
             .asFlow()
             .mapToList(Dispatchers.IO)
             .mapLatest { applicationStatusWithJobs ->
@@ -66,14 +66,14 @@ internal class ApplicationStatusRepositoryImpl(
 
     override suspend fun insert(name: String) {
         withContext(Dispatchers.IO) {
-            db.jobTrackerQueries.insertApplicationStatus(name)
+            db.applicationStatusQueries.insert(name)
         }
     }
 
 
     override suspend fun insertJob(job: Job) {
         withContext(Dispatchers.IO) {
-            db.jobTrackerQueries.insertJob(
+            db.jobQueries.insert(
                 companyName = job.companyName,
                 jobTitle = job.jobTitle,
                 salary = job.salary,
@@ -87,7 +87,7 @@ internal class ApplicationStatusRepositoryImpl(
 
     override suspend fun deleteJob(jobId: Long) {
         withContext(Dispatchers.IO) {
-            db.jobTrackerQueries.deleteJob(jobId)
+            db.jobQueries.delete(jobId)
         }
     }
 }

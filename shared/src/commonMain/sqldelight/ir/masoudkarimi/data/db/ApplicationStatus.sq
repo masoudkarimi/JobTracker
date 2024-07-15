@@ -1,20 +1,8 @@
 CREATE TABLE ApplicationStatus(
-    id INTEGER NOT NULL PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     name TEXT NOT NULL,
     position INTEGER NOT NULL,
     jobCount INTEGER NOT NULL DEFAULT 0
-);
-
-CREATE TABLE Job(
-    id INTEGER PRIMARY KEY,
-    companyName TEXT NOT NULL,
-    jobTitle TEXT NOT NULL,
-    salary TEXT NOT NULL,
-    location TEXT NOT NULL,
-    link TEXT NOT NULL,
-    applicationStatusId INTEGER NOT NULL,
-    createdAt TEXT NOT NULL ,
-    FOREIGN KEY(applicationStatusId) REFERENCES ApplicationStatus(id)
 );
 
 -- Trigger to update job_count when a job is added
@@ -53,32 +41,11 @@ FROM ApplicationStatus
 LEFT JOIN Job ON ApplicationStatus.id = Job.applicationStatusId
 ORDER BY ApplicationStatus.position;
 
-insertApplicationStatus:
+insert:
 INSERT INTO ApplicationStatus (name, position) VALUES (:name, IFNULL((SELECT MAX(position) FROM ApplicationStatus) + 1, 1));
 
-updateApplicationStatus:
+update:
 UPDATE ApplicationStatus SET name = :name, position = :position WHERE id = :id;
 
-deleteApplicationStatus:
+delete:
 DELETE FROM ApplicationStatus WHERE id = :id;
-
-insertJob:
-INSERT INTO Job (
-    companyName, jobTitle, salary, location, link, applicationStatusId, createdAt
-) VALUES (
-    ?, ?, ?, ?, ?, ?, ?
-);
-
-deleteJob:
-DELETE FROM Job WHERE id = :id;
-
-updateJob:
-UPDATE Job
-SET companyName = :companyName,
-    jobTitle = :jobTitle,
-    salary = :salary,
-    location = :location,
-    link = :link,
-    applicationStatusId = :applicationStatusId,
-    createdAt = :createdAt
-WHERE id = :id;
